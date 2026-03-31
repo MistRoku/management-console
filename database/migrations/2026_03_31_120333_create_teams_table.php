@@ -12,9 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('teams', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        $table->id();
+        $table->string('name');                    // "Acme Corp"
+        $table->string('slug')->unique();          // "acme-corp"
+        $table->string('stripe_id')->nullable()->unique();  // Stripe customer ID
+        $table->string('stripe_status')->nullable();        // "active", "trialing"
+        $table->string('stripe_subscription')->nullable();
+        $table->timestamp('trial_ends_at')->nullable();     // 14-day trial
+        $table->timestamps();
+    });
     }
 
     /**

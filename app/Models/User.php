@@ -28,5 +28,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+
     }
+
+    public function teams()
+{
+    return $this->belongsToMany(Team::class, 'user_teams')
+                ->withPivot('role')      // owner, admin, member
+                ->withTimestamps()
+                ->as('membership');
+}
+
+public function ownedTeams()
+{
+    return $this->teams()->wherePivot('role', 'owner');
+}
 }

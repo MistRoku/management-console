@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,11 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
+            $table->string('stripe_id')->unique();
+            $table->string('stripe_status');
+            $table->timestamp('stripe_current_period_ends_at')->nullable();
             $table->timestamps();
         });
     }

@@ -32,15 +32,21 @@ class User extends Authenticatable
     }
 
     public function teams()
-{
-    return $this->belongsToMany(Team::class, 'user_teams')
-                ->withPivot('role')      // owner, admin, member
-                ->withTimestamps()
-                ->as('membership');
-}
+    {
+        return $this->belongsToMany(Team::class, 'user_teams')
+            ->withPivot('role')      // owner, admin, member
+            ->withTimestamps()
+            ->as('membership');
+    }
 
-public function ownedTeams()
-{
-    return $this->teams()->wherePivot('role', 'owner');
-}
+    public function ownedTeams()
+    {
+        return $this->teams()->wherePivot('role', 'owner');
+    }
+
+    public function currentTeam()
+    {
+        return $this->teams()->wherePivot('role', 'owner')->first();
+    }
+
 }

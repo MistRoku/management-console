@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use App\Models\User;
 
 class TeamController extends Controller
 {
@@ -12,7 +14,8 @@ class TeamController extends Controller
      */
     public function index()
     {
-        //
+        $teams = auth()->guard()->user()->teams;
+        return view('teams.index', compact('teams'));
     }
 
     /**
@@ -20,7 +23,7 @@ class TeamController extends Controller
      */
     public function create()
     {
-        //
+        return view('teams.create');
     }
 
     /**
@@ -28,7 +31,20 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:teams',
+        ]);
+
+        $team = Team::create([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+            'trial_ends_at' => now()->addDays(14),
+        ]);
+
+        auth()->guard()->user()->teams()->attach($team->id, ['role' => 'owner']);
+
+        return redirect()->route('teams.show', $team)
+            ->with('success', 'Team created! 14-day trial activated.');
     }
 
     /**

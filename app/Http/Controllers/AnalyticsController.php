@@ -10,7 +10,7 @@ class AnalyticsController extends Controller
     public function dashboard()
     {
         $team = auth()->guard()->user()->currentTeam;
-        
+
         $stats = [
             'total_users' => $team->users()->count(),
             'total_revenue' => $team->subscription?->plan->price ?? 0,

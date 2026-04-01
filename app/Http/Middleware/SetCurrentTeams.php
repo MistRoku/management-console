@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetCurrentTeams
 {
-    /**
+    /**php artisan make:job HandleNewSubscription
      * Handle an incoming request.
      *
      * @param  Closure(Request): (Response)  $next

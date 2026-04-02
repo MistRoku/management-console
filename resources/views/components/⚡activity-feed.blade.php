@@ -2,9 +2,24 @@
 
 use Livewire\Component;
 
-new class extends Component
+class ActivityFeed extends Component
 {
-    //
+    public $teamId;
+
+    public function mount($teamId)
+    {
+        $this->teamId = $teamId;
+    }
+
+    public function render()
+    {
+        $activities = Activity::where('team_id', $this->teamId)
+            ->latest()
+            ->take(20)
+            ->get();
+
+        return view('livewire.activity-feed', compact('activities'));
+    }
 };
 ?>
 

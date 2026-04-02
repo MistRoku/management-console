@@ -21,7 +21,7 @@ import {
   EMPTY,
   BehaviorSubject
 } from 'rxjs';
-import { TeamsService, Team } from '../../../core/services/teams/teams.service';
+import { TeamsService, Team } from '../../../core/services/teams.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 

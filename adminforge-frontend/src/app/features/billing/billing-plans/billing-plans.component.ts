@@ -1,11 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TeamsService, Plan } from '../../../core/services/teams/teams.service';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { TeamsService, Plan } from '../../../core/services/teams.service';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   selector: 'app-billing-plans',
-  templateUrl: './billing-plans.component.html',
-  styleUrls: ['./billing-plans.component.scss']
+  template: `
+    <div *ngIf="loading">Loading...</div>
+
+    <form [formGroup]="billingForm" (ngSubmit)="subscribe()">
+      <div *ngFor="let plan of plans">
+        <label>
+          <input type="radio" formControlName="planId" [value]="plan.id" />
+          {{ plan.name }} - {{ plan.price | currency }}
+        </label>
+      </div>
+
+      <div>
+        <input formControlName="couponCode" placeholder="Coupon code" />
+      </div>
+
+      <button type="submit" [disabled]="loading || billingForm.invalid">Subscribe</button>
+    </form>
+  `
 })
 export class BillingPlansComponent implements OnInit {
   plans: Plan[] = [];

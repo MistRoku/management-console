@@ -1,0 +1,65 @@
+<div class="teams-container">
+  <mat-card class="teams-header">
+    <mat-card-header>
+      <mat-card-title>My Teams</mat-card-title>
+      <mat-card-subtitle>Manage your SaaS teams</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="search-section">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search teams...</mat-label>
+          <input matInput [formControl]="searchControl">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="createTeam()">
+          <mat-icon>add</mat-icon>
+          Create New Team
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+    <p>Loading teams...</p>
+  </div>
+
+  <mat-card *ngIf="!loading && filteredTeams.length === 0" class="empty-state">
+    <mat-card-content>
+      <mat-icon>groups</mat-icon>
+      <h3>No teams found</h3>
+      <p>Create your first team to get started with AdminForge</p>
+      <button mat-raised-button color="primary" (click)="createTeam()">
+        Create First Team
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-list *ngIf="!loading && filteredTeams.length > 0">
+    <mat-list-item *ngFor="let team of filteredTeams" class="team-item">
+      <mat-icon matListIcon>business</mat-icon>
+
+      <div matLine class="team-info">
+        <h3>{{ team.name }}</h3>
+        <p>{{ team.slug }}</p>
+        <mat-chip *ngIf="team.trial_ends_at" color="warn" selected>
+          Trial Active
+        </mat-chip>
+        <mat-chip *ngIf="team.subscription_count" color="primary" selected>
+          {{ team.subscription_count }} Subscription
+        </mat-chip>
+      </div>
+
+      <div class="team-actions">
+        <button mat-icon-button color="primary" (click)="switchTeam(team.id)" matTooltip="Switch to this team">
+          <mat-icon>switch_account</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" matTooltip="Manage team">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
